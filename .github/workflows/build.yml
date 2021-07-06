@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ town-map ]
   pull_request:
 
 jobs:
@@ -13,16 +13,10 @@ jobs:
       GAME_REVISION: 0
       GAME_LANGUAGE: ENGLISH
       MODERN: 0
-      COMPARE: 1
+      COMPARE: 0
     steps:
       - name: Checkout
         uses: actions/checkout@master
-
-      - name: Checkout syms
-        uses: actions/checkout@master
-        with:
-          path: symbols
-          ref: symbols
 
       - name: Checkout agbcc
         uses: actions/checkout@master
@@ -42,33 +36,11 @@ jobs:
           ./install.sh ../
         working-directory: agbcc
 
-      - name: Compare
+      - name: Build
         run: make -j${nproc} all syms
 
-      - name: Modern
-        env:
-          MODERN: 1
-          COMPARE: 0
-        run: make -j${nproc} all
-
-      - name: Webhook
-        if: ${{ github.event_name == 'push' }}
-        env:
-          CALCROM_DISCORD_WEBHOOK_USERNAME: OK
-          CALCROM_DISCORD_WEBHOOK_AVATAR_URL: https://i.imgur.com/38BQHdd.png
-          CALCROM_DISCORD_WEBHOOK_URL: ${{ secrets.CALCROM_DISCORD_WEBHOOK_URL }}
-        run: sh .github/calcrom/webhook.sh pokeemerald
-
-      - name: Move symfiles
-        if: ${{ github.event_name == 'push' }}
-        run: |
-          cp -v *.sym symbols/
-
-      - name: Update symfiles
-        if: ${{ github.event_name == 'push' }}
-        uses: EndBug/add-and-commit@v7
+      - name: Upload ROM
+        uses: actions/upload-artifact@v1
         with:
-          branch: symbols
-          cwd: "./symbols"
-          add: "*.sym"
-          message: ${{ github.event.commits[0].message }}
+          name: pokeemerald.gba
+          path: pokeemerald.gba

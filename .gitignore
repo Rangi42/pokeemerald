@@ -11,6 +11,7 @@
 *.4bpp
 *.8bpp
 *.gbapal
+*.gbapal.bin
 *.lz
 *.rl
 *.latfont

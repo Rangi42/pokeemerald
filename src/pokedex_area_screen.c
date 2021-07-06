@@ -228,14 +228,6 @@ static const u8 sAreaGlowTilemapMapping[] = {
     0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
 };
 
-static const struct PokedexAreaMapTemplate sPokedexAreaMapTemplate =
-{
-    .bg = 3,
-    .offset = 0,
-    .mode = 0,
-    .unk = 2,
-};
-
 static const u8 sAreaMarkerTiles[];
 static const struct SpriteSheet sAreaMarkerSpriteSheet =
 {
@@ -661,7 +653,7 @@ static void Task_ShowPokedexAreaScreen(u8 taskId)
             break;
         case 1:
             SetBgAttribute(3, BG_ATTR_CHARBASEINDEX, 3);
-            LoadPokedexAreaMapGfx(&sPokedexAreaMapTemplate);
+            LoadPokedexAreaMapGfx();
             StringFill(sPokedexAreaScreen->charBuffer, CHAR_SPACE, 16);
             break;
         case 2:

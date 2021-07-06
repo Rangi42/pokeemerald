@@ -342,15 +342,19 @@ $(FONTGFXDIR)/keypad_icons.4bpp: %.4bpp: %.png
 
 
 
+### Town Map ###
+# 0x70 * 2 + 1 = 225 (skip this many bytes)
+# 0x60 * 2 = 96 (use this many bytes)
+graphics/pokenav/region_map.gbapal.bin: %.bin: %
+	tail -c +225 $< | head -c 96 > $@
+
+
 ### Miscellaneous ###
 graphics/title_screen/pokemon_logo.gbapal: %.gbapal: %.pal
 	$(GFX) $< $@ -num_colors 224
 
 graphics/pokemon_jump/bg.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 63
-
-graphics/pokenav/region_map.8bpp: %.8bpp: %.png
-	$(GFX) $< $@ -num_tiles 233
 
 $(MISCGFXDIR)/japanese_hof.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 29
@@ -714,12 +718,6 @@ $(PKNAVGFXDIR)/device_outline.4bpp: %.4bpp: %.png
 	
 $(PKNAVGFXDIR)/ui_matchcall.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 13
-
-$(INTERFACEGFXDIR)/region_map.8bpp: %.8bpp: %.png
-	$(GFX) $< $@ -num_tiles 232
-
-$(INTERFACEGFXDIR)/region_map_affine.8bpp: %.8bpp: %.png
-	$(GFX) $< $@ -num_tiles 233
 
 $(MISCGFXDIR)/birch_help.4bpp: $(MISCGFXDIR)/birch_bag.4bpp $(MISCGFXDIR)/birch_grass.4bpp
 	@cat $^ >$@
